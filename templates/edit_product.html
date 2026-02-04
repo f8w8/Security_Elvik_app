@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Product - Elvik</title>
+    <style>
+        /* Basic page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation bar */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        /* Header content wrapper */
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Site logo */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Navigation links container */
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Individual navigation links */
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+
+        /* Darken links on hover */
+        .nav-links a:hover {
+            background: #555;
+        }
+
+        /* Main content container - narrower for forms */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* White card containing the form */
+        .form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form heading */
+        .form-card h1 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        /* Form subtitle text */
+        .form-card p {
+            margin: 0 0 25px 0;
+            color: #666;
+        }
+
+        /* Alert message box */
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        /* Green alert for success messages */
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Red alert for error messages */
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Individual form field container */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        /* Field labels */
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Input fields, textareas, and dropdowns */
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        /* Textarea specific styling */
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Blue border when field is focused */
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        /* Helper text under input fields */
+        .form-group small {
+            display: block;
+            margin-top: 5px;
+            color: #666;
+            font-size: 12px;
+        }
+
+        /* Two-column layout for price and stock */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Standard button styling */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Blue primary button */
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        /* Darker blue on hover */
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        /* Gray secondary button */
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        /* Darker gray on hover */
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        /* Button container at bottom of form */
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        /* Gray box showing current product info */
+        .product-preview {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        /* Preview heading */
+        .product-preview h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        /* Metadata text (ID and creation date) */
+        .product-preview .meta {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top navigation bar -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">Elvik - Admin</div>
+            <!-- Navigation links -->
+            <div class="nav-links">
+                <a href="{{ url_for('manage_products') }}">← Back to Products</a>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Display flash messages if any -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="form-card">
+            <h1>✏️ Edit Product</h1>
+            <p>Update product details and save changes</p>
+
+            <!-- Show current product info before editing -->
+            <div class="product-preview">
+                <h3>Current Product</h3>
+                <!-- Display product ID and creation timestamp -->
+                <p class="meta"><strong>Product ID:</strong> {{ product.id }} | <strong>Created:</strong> {{
+                    product.created_at }}</p>
+            </div>
+
+            <!-- Edit form with CSRF protection -->
+            <form method="POST" action="{{ url_for('edit_product', product_id=product.id) }}">
+                <!-- CSRF token for security -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <!-- Product title field -->
+                <div class="form-group">
+                    <label for="title">Product Title *</label>
+                    <!-- Pre-filled with current title -->
+                    <input type="text" id="title" name="title" value="{{ product.title }}" required maxlength="200">
+                    <small>Maximum 200 characters</small>
+                </div>
+
+                <!-- Product description field -->
+                <div class="form-group">
+                    <label for="description">Description *</label>
+                    <!-- Pre-filled with current description -->
+                    <textarea id="description" name="description" required
+                        maxlength="2000">{{ product.description }}</textarea>
+                    <small>Maximum 2000 characters</small>
+                </div>
+
+                <!-- Price and stock in two columns -->
+                <div class="form-row">
+                    <!-- Price input -->
+                    <div class="form-group">
+                        <label for="price">Price ($) *</label>
+                        <!-- Allows decimals for cents -->
+                        <input type="number" id="price" name="price" value="{{ product.price }}" step="0.01" min="0"
+                            required>
+                        <small>Enter price in dollars (e.g., 19.99)</small>
+                    </div>
+
+                    <!-- Stock quantity input -->
+                    <div class="form-group">
+                        <label for="stock">Stock Quantity *</label>
+                        <input type="number" id="stock" name="stock" value="{{ product.stock }}" min="0" required>
+                        <small>Number of units available</small>
+                    </div>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+                    <a href="{{ url_for('manage_products') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

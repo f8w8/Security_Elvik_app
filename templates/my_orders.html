@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Orders - Elvik</title>
+    <style>
+        /* Basic page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation bar */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        /* Header content wrapper */
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Site logo */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Navigation links container */
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Individual navigation links */
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+
+        /* Darken links on hover */
+        .nav-links a:hover {
+            background: #555;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Page header section */
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Page heading */
+        .page-header h1 {
+            margin: 0;
+            color: #333;
+        }
+
+        /* Base alert styling */
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        /* Error message style */
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Success message style */
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Orders list container */
+        .orders-list {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Individual order card */
+        .order-card {
+            border: 2px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        /* Order card hover effect */
+        .order-card:hover {
+            border-color: #007bff;
+            box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
+        }
+
+        /* Order card header */
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Order ID display */
+        .order-id {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Order date display */
+        .order-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Order information grid */
+        .order-info {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        /* Individual info item */
+        .info-item {
+            text-align: center;
+        }
+
+        /* Info label styling */
+        .info-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        /* Info value styling */
+        .info-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 5px;
+        }
+
+        /* Order total amount styling */
+        .order-total {
+            color: #28a745;
+        }
+
+        /* Status badge styling */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Completed status badge */
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Cancelled status badge */
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Order action buttons container */
+        .order-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Standard button styling */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* Blue primary button */
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        /* Darker blue on hover */
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        /* Empty state container */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        /* Empty state icon */
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        /* Empty state heading */
+        .empty-state h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* Empty state description */
+        .empty-state p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Green success button */
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Darker green on hover */
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top navigation bar -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🛒 Elvik</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('products') }}">Browse Products</a>
+                <a href="{{ url_for('view_cart') }}">Cart</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content container -->
+    <div class="container">
+        <!-- Page header -->
+        <div class="page-header">
+            <h1>📦 My Orders</h1>
+        </div>
+
+        <!-- Display flash messages if any -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <!-- Loop through each message -->
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Orders list -->
+        <div class="orders-list">
+            {% if orders %}
+            <!-- Loop through each order -->
+            {% for order in orders %}
+            <div class="order-card">
+                <div class="order-header">
+                    <div>
+                        <div class="order-id">Order #{{ order.id }}</div>
+                        <div class="order-date">📅 Placed on {{ order.created_at[:10] }}</div>
+                    </div>
+                    <span class="status-badge status-{{ order.status }}">{{ order.status }}</span>
+                </div>
+
+                <div class="order-info">
+                    <div class="info-item">
+                        <div class="info-label">Items</div>
+                        <div class="info-value">{{ order.item_count }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Total</div>
+                        <div class="info-value order-total">${{ "%.2f"|format(order.total) }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Status</div>
+                        <div class="info-value">{{ order.status.title() }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Order Date</div>
+                        <div class="info-value" style="font-size: 14px;">{{ order.created_at[:10] }}</div>
+                    </div>
+                </div>
+
+                <div class="order-actions">
+                    <a href="{{ url_for('order_detail', order_id=order.id) }}" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <!-- Empty state when no orders -->
+            <div class="empty-state">
+                <div class="empty-state-icon">📦</div>
+                <h2>No orders yet</h2>
+                <p>Start shopping to place your first order</p>
+                <a href="{{ url_for('products') }}" class="btn btn-success">Browse Products</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

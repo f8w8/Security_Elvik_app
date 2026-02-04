@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Shopping Cart - Elvik</title>
+    <style>
+        /* Basic page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation bar with dark background */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        /* Header content wrapper - centers everything */
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Site logo with shopping cart emoji */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Navigation links container */
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Individual navigation links */
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+
+        /* Darken links on hover */
+        .nav-links a:hover {
+            background: #555;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* White box for page title */
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Page heading style */
+        .page-header h1 {
+            margin: 0;
+            color: #333;
+        }
+
+        /* Alert message box */
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        /* Red alert for errors */
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Green alert for success messages */
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Two-column layout: cart items on left, summary on right */
+        .cart-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        /* Container for all cart items */
+        .cart-items {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Individual cart item - image, details, and actions */
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Remove border from last item */
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Product image styling */
+        .item-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* Placeholder box when no image exists */
+        .item-image-placeholder {
+            width: 100px;
+            height: 100px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            color: #999;
+        }
+
+        /* Product title styling */
+        .item-details h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        /* Product info text */
+        .item-details p {
+            color: #666;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        /* Price display in green */
+        .item-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        /* Right column with update/remove buttons */
+        .item-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        /* Quantity input with update button */
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Number input for quantity */
+        .quantity-control input {
+            width: 60px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        /* Blue update button */
+        .quantity-control button {
+            padding: 5px 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Darker blue on hover */
+        .quantity-control button:hover {
+            background: #0056b3;
+        }
+
+        /* Red remove button */
+        .remove-btn {
+            padding: 5px 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Darker red on hover */
+        .remove-btn:hover {
+            background: #c82333;
+        }
+
+        /* Right sidebar with order summary and checkout */
+        .cart-summary {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        /* Summary heading with blue underline */
+        .cart-summary h2 {
+            margin: 0 0 20px 0;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        /* Each row in the summary (subtotal, shipping, etc) */
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Total row with bigger font and top border */
+        .summary-row.total {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            border-bottom: none;
+            margin-top: 10px;
+            padding-top: 20px;
+            border-top: 2px solid #333;
+        }
+
+        /* Big green checkout button */
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        /* Darker green on hover */
+        .checkout-btn:hover {
+            background: #1e7e34;
+        }
+
+        /* Gray "continue shopping" button */
+        .continue-shopping {
+            width: 100%;
+            padding: 10px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        /* Darker gray on hover */
+        .continue-shopping:hover {
+            background: #545b62;
+        }
+
+        /* Display when cart has no items */
+        .empty-cart {
+            background: white;
+            padding: 60px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Empty cart heading */
+        .empty-cart h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Big shopping cart emoji for empty state */
+        .empty-cart-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        /* Standard button style */
+        .btn {
+            padding: 12px 30px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* Darker blue on hover */
+        .btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top navigation header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🛒 Elvik</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('products') }}">Browse Products</a>
+                <a href="{{ url_for('view_cart') }}">Cart</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Page title -->
+        <div class="page-header">
+            <h1>🛒 Shopping Cart</h1>
+        </div>
+
+        <!-- Display any flash messages (success or error) -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <!-- Only show cart if items exist -->
+        {% if cart_items %}
+        <div class="cart-content">
+            <!-- Left column: list of cart items -->
+            <div class="cart-items">
+                <!-- Loop through each item in cart -->
+                {% for item in cart_items %}
+                <div class="cart-item">
+                    <!-- Product image or placeholder -->
+                    <div>
+                        {% if item.image_path %}
+                        <img src="{{ url_for('static', filename=item.image_path) }}" alt="{{ item.title }}"
+                            class="item-image">
+                        {% else %}
+                        <!-- Show package emoji if no image -->
+                        <div class="item-image-placeholder">📦</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Product information -->
+                    <div class="item-details">
+                        <h3>{{ item.title }}</h3>
+                        <p>Sold by: <strong>{{ item.seller_name }}</strong></p>
+                        <p class="item-price">${{ "%.2f"|format(item.price) }} each</p>
+                        <p>Stock: {{ item.stock }} available</p>
+                    </div>
+
+                    <!-- Actions column: update quantity and remove -->
+                    <div class="item-actions">
+                        <!-- Form to update quantity -->
+                        <form method="POST" action="{{ url_for('update_cart', cart_id=item.cart_id) }}"
+                            class="quantity-control">
+                            <!-- CSRF token for security -->
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <!-- Number input limited by available stock -->
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1"
+                                max="{{ item.stock }}">
+                            <button type="submit">Update</button>
+                        </form>
+
+                        <!-- Form to remove item from cart -->
+                        <form method="POST" action="{{ url_for('remove_from_cart', cart_id=item.cart_id) }}"
+                            style="margin: 0;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <!-- Confirm before deleting -->
+                            <button type="submit" class="remove-btn"
+                                onclick="return confirm('Remove this item?');">Remove</button>
+                        </form>
+
+                        <!-- Show subtotal for this item -->
+                        <div style="font-size: 18px; font-weight: bold; color: #333; margin-top: 10px;">
+                            Subtotal: ${{ "%.2f"|format(item.price * item.quantity) }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Right column: order summary -->
+            <div class="cart-summary">
+                <h2>Order Summary</h2>
+
+                <!-- Subtotal calculation -->
+                <div class="summary-row">
+                    <span>Subtotal ({{ cart_items|length }} items)</span>
+                    <span>${{ "%.2f"|format(total) }}</span>
+                </div>
+
+                <!-- Shipping info (free for now) -->
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span>FREE</span>
+                </div>
+
+                <!-- Final total -->
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span>${{ "%.2f"|format(total) }}</span>
+                </div>
+
+                <!-- Checkout form -->
+                <form method="POST" action="{{ url_for('checkout') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <!-- Confirm before checkout -->
+                    <button type="submit" class="checkout-btn" onclick="return confirm('Proceed with checkout?');">
+                        💳 Proceed to Checkout
+                    </button>
+                </form>
+
+                <!-- Link back to products page -->
+                <a href="{{ url_for('products') }}" class="continue-shopping">Continue Shopping</a>
+            </div>
+        </div>
+        {% else %}
+        <!-- Show this when cart is empty -->
+        <div class="empty-cart">
+            <div class="empty-cart-icon">🛒</div>
+            <h2>Your cart is empty</h2>
+            <p>Start shopping to add items to your cart</p>
+            <!-- Button to browse products -->
+            <a href="{{ url_for('products') }}" class="btn">Browse Products</a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>

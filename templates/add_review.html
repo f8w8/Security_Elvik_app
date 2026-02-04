@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Write Review - Elvik</title>
+    <style>
+        /* Basic page styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Navigation header styling */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            background: #555;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Back link styling */
+        .back-link {
+            display: inline-block;
+            color: #007bff;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Main review form container */
+        .review-form {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .review-form h1 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        /* Product info box at the top - shows what product user is reviewing */
+        .product-info {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+
+        /* Product image styling */
+        .product-info img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* Placeholder when product has no image */
+        .product-info-placeholder {
+            width: 100px;
+            height: 100px;
+            background: #ddd;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 36px;
+        }
+
+        /* Product name and description text */
+        .product-info-text h3 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+
+        .product-info-text p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Form field container */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Star rating container - holds all 5 stars */
+        .rating-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* Each star label with hidden radio button */
+        .star-label {
+            cursor: pointer;
+            margin: 0;
+        }
+
+        /* Hide the actual radio button - we show the star instead */
+        .star-label input[type="radio"] {
+            display: none;
+        }
+
+        /* Star icon styling - gray by default */
+        .star {
+            font-size: 40px;
+            color: #ddd;
+            transition: color 0.2s;
+        }
+
+        /* Turn star yellow on hover */
+        .star:hover {
+            color: #ffc107;
+        }
+
+        /* Highlight all stars up to and including checked */
+        .star-label:has(input:checked)~.star-label .star,
+        .star-label:has(input:checked) .star {
+            color: #ffc107;
+        }
+
+        /* Hover effect shows yellow up to hovered star */
+        .star-label:hover~.star-label .star,
+        .star-label:hover .star {
+            color: #ffc107;
+        }
+
+        /* Review text area styling */
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        /* Character counter display - shows how many chars used out of 1000 */
+        .char-count {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Hint box for formatting instructions (not used but keeping for future) */
+        .formatting-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .formatting-hint strong {
+            color: #333;
+        }
+
+        /* File upload input styling */
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Help text for file upload */
+        .file-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Formatting toolbar styling */
+        .formatting-toolbar {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .format-btn {
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .format-btn:hover {
+            background: #e9ecef;
+            border-color: #007bff;
+        }
+
+        .format-btn:active {
+            transform: scale(0.95);
+        }
+
+        .toolbar-separator {
+            width: 1px;
+            background: #ddd;
+            margin: 0 5px;
+        }
+
+        /* Live preview styling */
+        .preview-panel {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 100px;
+        }
+
+        .preview-panel h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .preview-content {
+            color: #555;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
+
+        .preview-content strong {
+            font-weight: 900;
+            color: #000;
+            background: #fffacd;
+            padding: 2px 4px;
+        }
+
+        .preview-content em {
+            font-style: italic;
+            color: #0066cc;
+        }
+
+        .preview-content ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .preview-content ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .preview-empty {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Button base styling */
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        /* Blue submit button */
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        /* Gray cancel button */
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        /* Error message styling */
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Hide the hidden rating value field */
+        input[type="hidden"]#rating-value {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🛒 Elvik</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('products') }}">Browse Products</a>
+                <a href="{{ url_for('my_orders') }}">My Orders</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Link back to product selection page -->
+        <a href="{{ url_for('write_review') }}" class="back-link">← Back to Product Selection</a>
+
+        <!-- Display any error messages from the server -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="review-form">
+            <h1>Write Your Review</h1>
+
+            <!-- Show product info so user knows what they're reviewing -->
+            <div class="product-info">
+                <!-- Display product image if available, otherwise show placeholder -->
+                {% if product.image_path %}
+                <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.title }}">
+                {% else %}
+                <div class="product-info-placeholder">📦</div>
+                {% endif %}
+                <div class="product-info-text">
+                    <h3>{{ product.title }}</h3>
+                    <p>Share your experience with this product</p>
+                </div>
+            </div>
+
+            <!-- Review form with file upload support -->
+            <form method="POST" enctype="multipart/form-data">
+                <!-- CSRF token for security - prevents fake form submissions -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <!-- Star rating selection (1-5 stars) -->
+                <div class="form-group">
+                    <label>Rating *</label>
+                    <div class="rating-input">
+                        <!-- 5 star rating system using radio buttons -->
+                        <label class="star-label">
+                            <input type="radio" name="rating" value="1" {% if rating==1 %}checked{% endif %}>
+                            <span class="star" data-rating="1">★</span>
+                        </label>
+                        <label class="star-label">
+                            <input type="radio" name="rating" value="2" {% if rating==2 %}checked{% endif %}>
+                            <span class="star" data-rating="2">★</span>
+                        </label>
+                        <label class="star-label">
+                            <input type="radio" name="rating" value="3" {% if rating==3 %}checked{% endif %}>
+                            <span class="star" data-rating="3">★</span>
+                        </label>
+                        <label class="star-label">
+                            <input type="radio" name="rating" value="4" {% if rating==4 %}checked{% endif %}>
+                            <span class="star" data-rating="4">★</span>
+                        </label>
+                        <label class="star-label">
+                            <input type="radio" name="rating" value="5" {% if rating==5 %}checked{% endif %}>
+                            <span class="star" data-rating="5">★</span>
+                        </label>
+                        <!-- Text label showing rating quality (Poor, Fair, Good, etc) -->
+                        <span id="rating-text" style="margin-left: 10px; color: #666; font-size: 18px;"></span>
+                    </div>
+                </div>
+
+                <!-- Review text area (required, max 1000 characters) -->
+                <div class="form-group">
+                    <label for="content">Your Review *</label>
+                    <!-- Formatting toolbar for text styling -->
+                    <div class="formatting-toolbar">
+                        <button type="button" class="format-btn" data-format="bold" title="Bold">
+                            <strong>B</strong>
+                        </button>
+                        <button type="button" class="format-btn" data-format="italic" title="Italic">
+                            <em>I</em>
+                        </button>
+                        <div class="toolbar-separator"></div>
+                        <button type="button" class="format-btn" data-format="bullet" title="Bullet List">
+                            • List
+                        </button>
+                        <button type="button" class="format-btn" data-format="numbered" title="Numbered List">
+                            1. List
+                        </button>
+                    </div>
+                    <textarea name="content" id="content" rows="8" maxlength="1000"
+                        placeholder="Share your detailed experience with this product...&#10;&#10;You can use:&#10;**bold text** for emphasis&#10;*italic text* for style&#10;- bullet points for lists">{{ content or '' }}</textarea>
+                    <div class="char-count"><span id="char-count">0</span>/1000 characters</div>
+                    <div class="file-hint">
+                        <strong>Formatting Guide:</strong> Use **text** for bold, *text* for italic, - for bullet points, or use the toolbar buttons above.
+                    </div>
+                    
+                    <!-- Live Preview Panel -->
+                    <div class="preview-panel">
+                        <h4>📝 Preview (how your review will look):</h4>
+                        <div class="preview-content" id="preview-content">
+                            <span class="preview-empty">Your formatted review will appear here...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Optional image upload for product photo -->
+                <div class="form-group">
+                    <label for="image">Add a Photo (Optional)</label>
+                    <input type="file" name="image" id="image" accept="image/png,image/jpeg,image/jpg,image/gif">
+                    <div class="file-hint">Upload a product image - PNG, JPG, JPEG, or GIF (Max 5MB)</div>
+                </div>
+
+                <!-- Submit and cancel buttons -->
+                <div>
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                    <a href="{{ url_for('write_review') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/review-formatting.js') }}"></script>
+</body>
+
+</html>

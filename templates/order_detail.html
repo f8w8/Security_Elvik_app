@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Order Details - Elvik</title>
+    <style>
+        /* Basic page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation bar */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        /* Header content wrapper */
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Site logo */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Navigation links container */
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Individual navigation links */
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+
+        /* Darken links on hover */
+        .nav-links a:hover {
+            background: #555;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Back to orders link */
+        .back-link {
+            display: inline-block;
+            color: #007bff;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        /* Underline on hover */
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Page header container */
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Order title */
+        .page-header h1 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        /* Order metadata display */
+        .order-meta {
+            display: flex;
+            gap: 30px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Base alert styling */
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        /* Error message style */
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Success message style */
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Main order content grid */
+        .order-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        /* Order items container */
+        .order-items {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Order items heading */
+        .order-items h2 {
+            margin: 0 0 20px 0;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        /* Individual order item */
+        .order-item {
+            display: grid;
+            grid-template-columns: 80px 1fr auto;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Remove border from last item */
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Product image in order */
+        .item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* Placeholder for missing image */
+        .item-image-placeholder {
+            width: 80px;
+            height: 80px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            color: #999;
+            font-size: 30px;
+        }
+
+        /* Product title */
+        .item-details h3 {
+            margin: 0 0 5px 0;
+            color: #333;
+            font-size: 16px;
+        }
+
+        /* Product details text */
+        .item-details p {
+            color: #666;
+            margin: 3px 0;
+            font-size: 14px;
+        }
+
+        /* Item price section */
+        .item-price {
+            text-align: right;
+        }
+
+        /* Unit price display */
+        .item-price .unit-price {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Total price display */
+        .item-price .total-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 5px;
+        }
+
+        /* Order summary sidebar */
+        .order-summary {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        /* Summary heading */
+        .order-summary h2 {
+            margin: 0 0 20px 0;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        /* Summary row layout */
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Total row styling */
+        .summary-row.total {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            border-bottom: none;
+            margin-top: 10px;
+            padding-top: 20px;
+            border-top: 2px solid #333;
+        }
+
+        /* Status badge styling */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+
+        /* Completed status color */
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Cancelled status color */
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Information box container */
+        .info-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        /* Info box label */
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        /* Info box value */
+        .info-box span {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top navigation bar -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🛒 Elvik</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('my_orders') }}">My Orders</a>
+                <a href="{{ url_for('products') }}">Browse Products</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content container -->
+    <div class="container">
+        <a href="{{ url_for('my_orders') }}" class="back-link">← Back to My Orders</a>
+
+        <div class="page-header">
+            <h1>Order #{{ order.id }}</h1>
+            <div class="order-meta">
+                <span>📅 Placed on {{ order.created_at[:10] }}</span>
+                <span>🕐 {{ order.created_at[11:16] }}</span>
+            </div>
+        </div>
+
+        <!-- Display flash messages if any -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <!-- Loop through each message -->
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="order-content">
+            <div class="order-items">
+                <h2>Order Items</h2>
+                <!-- Loop through order items -->
+                {% for item in order_items %}
+                <div class="order-item">
+                    <div>
+                        {% if item.image_path %}
+                        <img src="{{ url_for('static', filename=item.image_path) }}" alt="{{ item.title }}"
+                            class="item-image">
+                        {% else %}
+                        <div class="item-image-placeholder">📦</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="item-details">
+                        <h3>{{ item.title }}</h3>
+                        <p>Sold by: <strong>{{ item.seller_name }}</strong></p>
+                        <p>Quantity: {{ item.quantity }}</p>
+                        <p>Unit Price: ${{ "%.2f"|format(item.unit_price) }}</p>
+                    </div>
+
+                    <div class="item-price">
+                        <div class="unit-price">${{ "%.2f"|format(item.unit_price) }} × {{ item.quantity }}</div>
+                        <div class="total-price">${{ "%.2f"|format(item.unit_price * item.quantity) }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div>
+                <!-- Order summary sidebar -->
+                <div class="order-summary">
+                    <h2>Order Summary</h2>
+
+                    <div class="info-box">
+                        <strong>Order Status</strong>
+                        <span class="status-badge status-{{ order.status }}">{{ order.status.title() }}</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>Order ID</strong>
+                        <span>#{{ order.id }}</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>Order Date</strong>
+                        <span>{{ order.created_at[:10] }} at {{ order.created_at[11:16] }}</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>${{ "%.2f"|format(order.total) }}</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span>FREE</span>
+                    </div>
+
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span>${{ "%.2f"|format(order.total) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

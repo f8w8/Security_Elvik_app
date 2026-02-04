@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Profile - Elvik</title>
+    <style>
+        /* Basic page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation bar */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        /* Header content wrapper */
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Site logo */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Navigation links container */
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Individual navigation links */
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+
+        /* Darken links on hover */
+        .nav-links a:hover {
+            background: #555;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Back to dashboard link */
+        .back-link {
+            display: inline-block;
+            color: #007bff;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        /* Underline on hover */
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* White card containing the form */
+        .profile-form {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form heading */
+        .profile-form h1 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        /* Form subtitle text */
+        .profile-form p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* Section divider with border */
+        .form-section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+
+        /* Remove border from last section */
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        /* Section headings */
+        .form-section h2 {
+            color: #333;
+            margin: 0 0 20px 0;
+            font-size: 20px;
+        }
+
+        /* Individual form field container */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        /* Field labels */
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Input fields */
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        /* Blue border when field is focused */
+        .form-group input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        /* Helper text under fields */
+        .form-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Standard button styling */
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        /* Blue primary button */
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        /* Darker blue on hover */
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        /* Gray secondary button */
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            margin-left: 10px;
+        }
+
+        /* Darker gray on hover */
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        /* Alert message box */
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        /* Green alert for success messages */
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Red alert for error messages */
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Blue info box for instructions */
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+
+        /* Info box text */
+        .info-box p {
+            margin: 0;
+            color: #004085;
+        }
+
+        /* Success popup that appears centered on screen */
+        .success-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #28a745;
+            color: white;
+            padding: 30px 50px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            z-index: 10000;
+            opacity: 0;
+            animation: fadeInOut 3s ease-in-out forwards;
+        }
+
+        /* Animation for success popup - fades in and out */
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+
+            10% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            90% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+        }
+
+        /* Green checkmark before success text */
+        .success-notification::before {
+            content: "✓";
+            display: block;
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top navigation bar -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🛒 Elvik</div>
+            <!-- Main navigation links -->
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('products') }}">Browse Products</a>
+                <a href="{{ url_for('my_orders') }}">My Orders</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Back link to dashboard -->
+        <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+
+        <!-- Display flash messages if any -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}        <div class="profile-form">
+            <h1>Edit Profile</h1>
+            <p>Update your account information</p>
+
+            <!-- Profile edit form with CSRF protection -->
+            <form method="POST">
+                <!-- CSRF token for security -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <!-- Personal information section -->
+                <div class="form-section">
+                    <h2>Personal Information</h2>
+
+                    <!-- Name field -->
+                    <div class="form-group">
+                        <label for="name">Name *</label>
+                        <!-- Pre-filled with current user name -->
+                        <input type="text" name="name" id="name" value="{{ user.name }}" required>
+                    </div>
+
+                    <!-- Email field -->
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <!-- Pre-filled with current email -->
+                        <input type="email" name="email" id="email" value="{{ user.email }}" required>
+                        <div class="form-hint">Make sure this is a valid email address</div>
+                    </div>
+                </div>
+
+                <!-- Password change section (optional) -->
+                <div class="form-section">
+                    <h2>Change Password (Optional)</h2>
+
+                    <!-- Info box explaining password is optional -->
+                    <div class="info-box">
+                        <p>Leave password fields empty if you don't want to change your password</p>
+                    </div>
+
+                    <!-- Current password required for security -->
+                    <div class="form-group">
+                        <label for="current_password">Current Password</label>
+                        <input type="password" name="current_password" id="current_password"
+                            autocomplete="current-password">
+                        <div class="form-hint">Required to change password</div>
+                    </div>
+
+                    <!-- New password field -->
+                    <div class="form-group">
+                        <label for="new_password">New Password</label>
+                        <input type="password" name="new_password" id="new_password" autocomplete="new-password">
+                        <!-- Password requirements hint -->
+                        <div class="form-hint">Minimum 8 characters, must contain uppercase, lowercase, and number</div>
+                    </div>
+
+                    <!-- Confirm new password -->
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm New Password</label>
+                        <input type="password" name="confirm_password" id="confirm_password"
+                            autocomplete="new-password">
+                    </div>
+                </div>
+
+                <!-- Action buttons -->
+                <div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success notification popup (only shows on success) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'success' %}
+    <!-- Display success message in popup -->
+    <div class="success-notification">{{ message }}</div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <script>
+        // Auto-redirect to dashboard after showing success notification (3 seconds)
+        const successNotification = document.querySelector('.success-notification');
+        if (successNotification) {
+            setTimeout(function () {
+                window.location.href = "{{ url_for('dashboard') }}";
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>

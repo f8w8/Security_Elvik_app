@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Reviews - Elvik</title>
+    <style>
+        /* Basic page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation bar */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        /* Header content wrapper */
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Site logo */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Navigation links container */
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Individual navigation links */
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+
+        /* Darken links on hover */
+        .nav-links a:hover {
+            background: #555;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Back to dashboard link */
+        .back-link {
+            display: inline-block;
+            color: #007bff;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        /* Underline on hover */
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Page heading */
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* Individual review card */
+        .review-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        /* Review header section */
+        .review-header {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        /* Product image in review */
+        .product-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        /* Placeholder for missing product image */
+        .product-image-placeholder {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+
+        /* Review header information */
+        .review-header-info {
+            flex: 1;
+        }
+
+        /* Product title in review */
+        .review-header-info h3 {
+            margin: 0 0 8px 0;
+            color: #333;
+            font-size: 22px;
+        }
+
+        /* Product link styling */
+        .review-header-info a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 22px;
+        }
+
+        /* Underline link on hover */
+        .review-header-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* Product price display */
+        .product-price {
+            color: #28a745;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        /* Review date display */
+        .review-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Star rating display */
+        .rating {
+            color: #ffc107;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Empty star styling */
+        .rating-empty {
+            color: #ddd;
+        }
+
+        /* Rating text label */
+        .rating-label {
+            color: #666;
+            font-size: 16px;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        /* Review text content */
+        .review-content {
+            color: #333;
+            line-height: 1.8;
+            font-size: 16px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+
+        /* Review uploaded image */
+        .review-image {
+            max-width: 350px;
+            max-height: 350px;
+            border-radius: 8px;
+            margin-top: 15px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Image hover effect */
+        .review-image:hover {
+            opacity: 0.9;
+        }
+
+        /* Empty state container */
+        .empty-state {
+            background: white;
+            border-radius: 8px;
+            padding: 80px 40px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Empty state icon */
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 25px;
+        }
+
+        /* Empty state heading */
+        .empty-state h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+
+        /* Empty state description */
+        .empty-state p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        /* Standard button styling */
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        /* Blue primary button */
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        /* Darker blue on hover */
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        /* Green success button */
+        .btn-success {
+            background: #28a745;
+            color: white;
+            margin-left: 10px;
+        }
+
+        /* Darker green on hover */
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+
+        /* Base alert styling */
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        /* Success message style */
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top navigation bar -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🛒 Elvik</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('products') }}">Browse Products</a>
+                <a href="{{ url_for('my_orders') }}">My Orders</a>
+                <a href="{{ url_for('write_review') }}">Write Review</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content container -->
+    <div class="container">
+        <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+
+        <!-- Display flash messages if any -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <!-- Loop through each message -->
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <h1>My Reviews</h1>
+
+        {% if reviews %}
+        <!-- Loop through each review -->
+        {% for review in reviews %}
+        <div class="review-card">
+            <div class="review-header">
+                {% if review.product_image %}
+                <img src="{{ url_for('static', filename=review.product_image) }}" alt="{{ review.product_title }}"
+                    class="product-image">
+                {% else %}
+                <div class="product-image-placeholder">📦</div>
+                {% endif %}
+                <div class="review-header-info">
+                    <h3><a href="{{ url_for('product_detail', product_id=review.product_id) }}">{{ review.product_title
+                            }}</a></h3>
+                    <div class="product-price">${{ "%.2f"|format(review.price) }}</div>
+                    <div class="review-date">Reviewed on {{ review.created_at[:10] }}</div>
+                </div>
+            </div>
+
+            <div class="rating">
+                {% for i in range(1, 6) %}
+                {% if i <= review.rating %} <span>★</span>
+                    {% else %}
+                    <span class="rating-empty">★</span>
+                    {% endif %}
+                    {% endfor %}
+                    <span class="rating-label">
+                        {% if review.rating == 1 %}Poor
+                        {% elif review.rating == 2 %}Fair
+                        {% elif review.rating == 3 %}Good
+                        {% elif review.rating == 4 %}Very Good
+                        {% elif review.rating == 5 %}Excellent
+                        {% endif %}
+                    </span>
+            </div>
+
+                                </div>
+                    {% if review.content %}
+                    <div class="review-content">{{ review.content | markdown | safe }}</div>
+                    {% endif %}
+                </div>
+
+            {% if review.image_path %}
+            <img src="{{ url_for('static', filename=review.image_path) }}" alt="Review photo" class="review-image">
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <!-- Empty state when no reviews -->
+        <div class="empty-state">
+            <div class="empty-state-icon">📝</div>
+            <h2>No Reviews Yet</h2>
+            <p>You haven't written any product reviews. Purchase products and share your experience!</p>
+            <a href="{{ url_for('products') }}" class="btn btn-primary">Browse Products</a>
+            <a href="{{ url_for('write_review') }}" class="btn btn-success">Write Review</a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>

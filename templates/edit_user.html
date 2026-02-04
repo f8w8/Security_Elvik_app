@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit User - Elvik</title>
+    <style>
+        /* Basic page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation bar */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        /* Header content wrapper */
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Site logo */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Main content container - narrow for forms */
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        /* White box containing the form */
+        .form-box {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Page heading */
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Individual form field container */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        /* Field labels */
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        /* Input fields and dropdown */
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        /* Blue border when field is focused */
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        /* Standard button styling */
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Blue primary button */
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        /* Darker blue on hover */
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        /* Gray cancel button */
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        /* Darker gray on hover */
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        /* Container for flash messages */
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        /* Individual alert message */
+        .alert {
+            padding: 12px 20px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        /* Green alert for success messages */
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Red alert for error messages */
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Gray box showing user info */
+        .user-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+        }
+
+        /* Each row in user info box */
+        .user-info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+
+        /* Label for user info (left side) */
+        .user-info-label {
+            font-weight: bold;
+            color: #666;
+        }
+
+        /* Value for user info (right side) */
+        .user-info-value {
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top navigation bar -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">Elvik</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Display flash messages if any -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            <!-- Loop through each message -->
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <div class="form-box">
+            <h1>Edit User Account</h1>
+
+            <!-- Display current user info that can't be changed -->
+            <div class="user-info">
+                <div class="user-info-item">
+                    <span class="user-info-label">User ID:</span>
+                    <span class="user-info-value">{{ user['id'] }}</span>
+                </div>
+                <div class="user-info-item">
+                    <span class="user-info-label">Account Created:</span>
+                    <!-- Show only the date part (first 10 chars) -->
+                    <span class="user-info-value">{{ user['created_at'][:10] }}</span>
+                </div>
+            </div>
+
+            <!-- Edit form with CSRF protection -->
+            <form method="POST">
+                <!-- CSRF token for security -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <!-- Name field - read-only, can't be changed by admin -->
+                <div class="form-group">
+                    <label for="name">Full Name (Read-Only)</label>
+                    <!-- Gray background and disabled cursor show it's read-only -->
+                    <input type="text" id="name" name="name" value="{{ user['name'] }}" readonly
+                        style="background-color: #e9ecef; cursor: not-allowed;">
+                </div>
+
+                <!-- Email field - read-only, can't be changed by admin -->
+                <div class="form-group">
+                    <label for="email">Email Address (Read-Only)</label>
+                    <input type="email" id="email" name="email" value="{{ user['email'] }}" readonly
+                        style="background-color: #e9ecef; cursor: not-allowed;">
+                </div>
+
+                <!-- Role field - this is what admin can actually change -->
+                <div class="form-group">
+                    <label for="role">User Role</label>
+                    <!-- Dropdown with three role options -->
+                    <select id="role" name="role" required>
+                        <!-- Pre-select the user's current role -->
+                        <option value="customer" {% if user['role']=='customer' %}selected{% endif %}>Customer</option>
+                        <option value="seller" {% if user['role']=='seller' %}selected{% endif %}>Seller</option>
+                        <option value="admin" {% if user['role']=='admin' %}selected{% endif %}>Admin</option>
+                    </select>
+                </div>
+
+                <!-- Action buttons -->
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a href="{{ url_for('manage_users') }}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

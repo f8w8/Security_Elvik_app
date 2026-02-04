@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Browse Products - Elvik</title>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <style>
+        /* Basic page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation bar */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        /* Header content wrapper */
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Site logo */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Navigation container */
+        .nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        /* Navigation links */
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+
+        /* Darken links on hover */
+        .nav a:hover {
+            background: #555;
+        }
+
+        /* User info display */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* User role badge */
+        .user-info span {
+            background: #555;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Page header section */
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Page heading */
+        .page-header h1 {
+            color: #333;
+            margin: 0 0 10px 0;
+        }
+
+        /* Page description */
+        .page-header p {
+            color: #666;
+            margin: 0;
+        }
+
+        /* Filter and search container */
+        .filter-search-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Search box container */
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        /* Search input field */
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* Highlight input on focus */
+        .search-box input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        /* Filter buttons container */
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Individual filter button */
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #007bff;
+            background: white;
+            color: #007bff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        /* Lighten button on hover */
+        .filter-btn:hover {
+            background: #e7f1ff;
+        }
+
+        /* Active filter button state */
+        .filter-btn.active {
+            background: #007bff;
+            color: white;
+        }
+
+        /* No results message */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 8px;
+            display: none;
+        }
+
+        /* No results heading */
+        .no-results h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* No results description */
+        .no-results p {
+            color: #666;
+        }
+
+        /* Products grid layout */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        /* Individual product card */
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        /* Card hover effect */
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Product image styling */
+        .product-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        /* Placeholder for missing image */
+        .product-image-placeholder {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 64px;
+        }
+
+        /* Product details section */
+        .product-details {
+            padding: 20px;
+        }
+
+        /* Product title */
+        .product-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin: 0 0 10px 0;
+            line-height: 1.4;
+        }
+
+        /* Product description text */
+        .product-description {
+            color: #666;
+            font-size: 14px;
+            margin: 0 0 15px 0;
+            line-height: 1.5;
+            max-height: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        /* Seller information */
+        .product-seller {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        /* Product footer section */
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        /* Product price display */
+        .product-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        /* Stock information section */
+        .product-stock {
+            font-size: 12px;
+        }
+
+        /* Stock status badge */
+        .stock-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* Available stock color */
+        .stock-available {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Low stock warning color */
+        .stock-low {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* Out of stock color */
+        .stock-out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Empty state container */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        /* Empty state icon */
+        .empty-state-icon {
+            font-size: 72px;
+            margin-bottom: 20px;
+        }
+
+        /* Empty state heading */
+        .empty-state h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* Empty state description */
+        .empty-state p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Flash messages container */
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        /* Base alert styling */
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        /* Success message style */
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Error message style */
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Authentication banner for guests */
+        .auth-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Banner heading */
+        .auth-banner h2 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+
+        /* Banner description */
+        .auth-banner p {
+            margin: 0 0 20px 0;
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        /* Banner buttons container */
+        .auth-banner-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        /* Banner button styling */
+        .auth-banner-btn {
+            padding: 12px 30px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        /* Button hover effect */
+        .auth-banner-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Primary button variant */
+        .auth-banner-btn.primary {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Primary button hover effect */
+        .auth-banner-btn.primary:hover {
+            background: transparent;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top navigation bar -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🛒 Elvik</div>
+            <div class="nav">
+                <a href="{{ url_for('products') }}">Browse Products</a>
+                <!-- Show different links based on login status -->
+                {% if session.get('user_id') %}
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('view_cart') }}">🛒 Cart</a>
+                {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('register') }}">Register</a>
+                {% endif %}
+            </div>
+            <!-- Display user info if logged in -->
+            {% if session.get('user_id') %}
+            <div class="user-info">
+                <span>{{ session.get('user_role', '').title() }}</span>
+                <strong>{{ session.get('user_name', '') }}</strong>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Main content container -->
+    <div class="container">
+        <div class="page-header">
+            <h1>🛍️ Browse Products</h1>
+            <p>Discover amazing deals on quality products</p>
+        </div>
+
+        <!-- Show authentication banner to guests -->
+        {% if not session.get('user_id') %}
+        <div class="auth-banner">
+            <h2>🎉 Welcome to Elvik!</h2>
+            <p>Sign in to add products to your cart and make purchases, or create an account to start shopping today!
+            </p>
+            <div class="auth-banner-buttons">
+                <a href="{{ url_for('login') }}" class="auth-banner-btn primary">Log In</a>
+                <a href="{{ url_for('register') }}" class="auth-banner-btn">Create Account</a>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Display flash messages if any -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <!-- Filter and search section -->
+        <div class="filter-search-container">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Search products by name, description, or seller...">
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Products</button>
+            </div>
+        </div>
+
+        <!-- No results message (hidden by default) -->
+        <div id="noResults" class="no-results">
+            <h3>📦 No Products Found</h3>
+            <p>Try adjusting your search or filters to find what you're looking for.</p>
+        </div>
+
+        <!-- Display products if available -->
+        {% if products|length > 0 %}
+        <div class="products-grid" id="productsGrid">
+            <!-- Loop through each product -->
+            {% for product in products %}
+            <a href="{{ url_for('product_detail', product_id=product.id) }}" class="product-card">
+                <!-- Display product image or placeholder -->
+                {% if product.image_path %}
+                <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.title }}"
+                    class="product-image">
+                {% else %}
+                <div class="product-image-placeholder">📦</div>
+                {% endif %}
+                <div class="product-details">
+                    <h3 class="product-title">{{ product.title }}</h3>
+
+                    <div class="product-seller">
+                        👤 Sold by {{ product.seller_name }}
+                    </div>
+
+                    {% if product.description %}
+                    <p class="product-description">{{ product.description }}</p>
+                    {% endif %}
+
+                    <div class="product-footer">
+                        <div class="product-price">${{ "%.2f"|format(product.price) }}</div>
+                        <!-- Display stock status with color coding -->
+                        <div class="product-stock">
+                            {% if product.stock > 50 %}
+                            <span class="stock-badge stock-available">In Stock</span>
+                            {% elif product.stock > 0 %}
+                            <span class="stock-badge stock-low">{{ product.stock }} left</span>
+                            {% else %}
+                            <span class="stock-badge stock-out">Out of Stock</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Show empty state when no products -->
+        <div class="empty-state">
+            <div class="empty-state-icon">📦</div>
+            <h3>No Products Found</h3>
+            {% if search_query %}
+            <p>No products match your search. Try different keywords.</p>
+            <a href="{{ url_for('products') }}" class="clear-search">View All Products</a>
+            {% else %}
+            <p>There are currently no products available. Check back soon!</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>

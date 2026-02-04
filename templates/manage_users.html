@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Manage Users - Elvik</title>
+    <!-- External JavaScript file -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <style>
+        /* Basic page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation bar */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        /* Header content wrapper */
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Site logo */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* White content box */
+        .content-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Page heading */
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* Standard button styling */
+        .btn {
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Gray back button */
+        .btn-back {
+            background: #6c757d;
+        }
+
+        /* Darker gray on hover */
+        .btn-back:hover {
+            background: #545b62;
+        }
+
+        /* Blue edit button */
+        .btn-edit {
+            background: #007bff;
+            padding: 6px 12px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        /* Darker blue on hover */
+        .btn-edit:hover {
+            background: #0056b3;
+        }
+
+        /* Red delete button */
+        .btn-delete {
+            background: #dc3545;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* Darker red on hover */
+        .btn-delete:hover {
+            background: #c82333;
+        }
+
+        /* Table layout */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        /* Table cells */
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Table header styling */
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        /* Highlight row on hover */
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* User role badge */
+        .user-role {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* Admin role badge */
+        .role-admin {
+            background: #dc3545;
+            color: white;
+        }
+
+        /* Seller role badge */
+        .role-seller {
+            background: #ffc107;
+            color: black;
+        }
+
+        /* Customer role badge */
+        .role-customer {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Flash messages container */
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        /* Base alert styling */
+        .alert {
+            padding: 12px 20px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        /* Success message style */
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Error message style */
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Statistics grid layout */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        /* Individual stat card */
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        /* Large number in stat card */
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* Label under the number */
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Filter and Search Styles */
+        .filter-search-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        /* Search input container */
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        /* Search input field */
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* Search input focus state */
+        .search-box input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        /* Filter buttons container */
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Filter button styling */
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #007bff;
+            background: white;
+            color: #007bff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        /* Filter button hover effect */
+        .filter-btn:hover {
+            background: #e7f1ff;
+        }
+
+        /* Active filter button */
+        .filter-btn.active {
+            background: #007bff;
+            color: white;
+        }
+
+        /* Active admin filter */
+        .filter-btn.filter-admin.active {
+            background: #dc3545;
+            border-color: #dc3545;
+        }
+
+        /* Active seller filter */
+        .filter-btn.filter-seller.active {
+            background: #ffc107;
+            border-color: #ffc107;
+            color: black;
+        }
+
+        /* Active customer filter */
+        .filter-btn.filter-customer.active {
+            background: #28a745;
+            border-color: #28a745;
+        }
+
+        /* No results message */
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top navigation bar -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">Elvik - User Management</div>
+        </div>
+    </div>
+
+    <!-- Main content container -->
+    <div class="container">
+        <!-- Display flash messages if any -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            <!-- Loop through each message -->
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <div class="content-box">
+            <a href="/dashboard" class="btn btn-back">← Back to Dashboard</a>
+            <h1>User Account Management</h1>
+
+            <!-- Statistics cards -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">{{ users|length }}</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <div class="stat-number">{{ users|selectattr('role', 'equalto', 'admin')|list|length }}</div>
+                    <div class="stat-label">Admins</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <div class="stat-number">{{ users|selectattr('role', 'equalto', 'seller')|list|length }}</div>
+                    <div class="stat-label">Sellers</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <div class="stat-number">{{ users|selectattr('role', 'equalto', 'customer')|list|length }}</div>
+                    <div class="stat-label">Customers</div>
+                </div>
+            </div>
+
+            <!-- Filter and search section -->
+            <div class="filter-search-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="🔍 Search by name, email, or ID...">
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-role="all" id="filter-all">All Users</button>
+                    <button class="filter-btn filter-admin" data-role="admin" id="filter-admin">Admins</button>
+                    <button class="filter-btn filter-seller" data-role="seller" id="filter-seller">Sellers</button>
+                    <button class="filter-btn filter-customer" data-role="customer"
+                        id="filter-customer">Customers</button>
+                </div>
+            </div>
+
+            <!-- Users table -->
+            <table id="usersTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop through each user -->
+                    {% for user in users %}
+                    <tr data-role="{{ user['role'] }}">
+                        <td>{{ user['id'] }}</td>
+                        <td>{{ user['name'] }}{% if user['id'] == session['user_id'] %} <span
+                                style="color: #007bff; font-weight: bold;">(You)</span>{% endif %}</td>
+                        <td>{{ user['email'] }}</td>
+                        <td><span class="user-role role-{{ user['role'] }}">{{ user['role'].upper() }}</span></td>
+                        <td>{{ user['created_at'][:10] }}</td>
+                        <td>
+                            {% if user['id'] == session['user_id'] %}
+                            <!-- No actions for current admin -->
+                            {% else %}
+                            <a href="{{ url_for('edit_user', user_id=user['id']) }}" class="btn btn-edit">Edit</a>
+                            <!-- Delete form -->
+                            <form action="{{ url_for('delete_user', user_id=user['id']) }}" method="POST"
+                                style="display:inline;" class="delete-form">
+                                <!-- CSRF token for security -->
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-delete">Delete</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- No results message (hidden by default) -->
+            <div id="noResults" class="no-results" style="display: none;">
+                No users found matching your search criteria.
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

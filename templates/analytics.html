@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Analytics Dashboard - Elvik</title>
+    <style>
+        /* Basic page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation bar */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* White box wrapper for each section */
+        .content-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        /* Page heading styles */
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* Section headings with blue underline */
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        /* Button styling */
+        .btn {
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* Gray back button */
+        .btn-back {
+            background: #6c757d;
+        }
+
+        .btn-back:hover {
+            background: #545b62;
+        }
+
+        /* Grid layout for statistics cards - responsive design */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* Individual stat card with gradient background */
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Different color gradients for each card type */
+        .stat-card.blue {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Pink/red gradient for products */
+        .stat-card.green {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        /* Cyan gradient for orders */
+        .stat-card.orange {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        /* Green/teal gradient for sales */
+        .stat-card.purple {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        /* Large number display in stat cards */
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Label text under the number */
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Container for charts (not used yet but here for future) */
+        .chart-container {
+            margin: 30px 0;
+        }
+
+        /* Activity table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        /* Table cells */
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Blue header for table */
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        /* Highlight row on hover */
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* User role badge styling (not used here but keeping for consistency) */
+        .user-role {
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* Role badge colors */
+        .role-admin {
+            background: #dc3545;
+            color: white;
+        }
+
+        .role-seller {
+            background: #ffc107;
+            color: black;
+        }
+
+        .role-customer {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Event badge styling (also not used but keeping for future) */
+        .event-badge {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 2px;
+        }
+
+        /* Progress bar container (keeping for future features) */
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 4px;
+            height: 30px;
+            position: relative;
+            margin-top: 10px;
+        }
+
+        /* Animated progress fill */
+        .progress-fill {
+            background: linear-gradient(90deg, #007bff, #0056b3);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top header bar -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">Elvik - Analytics Dashboard</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Back button to return to main dashboard -->
+        <a href="/dashboard" class="btn btn-back">← Back to Dashboard</a>
+
+        <!-- Basic Statistics Section - shows key platform metrics -->
+        <div class="content-box">
+            <h2>📊 Platform Statistics</h2>
+            <div class="stats-grid">
+                <!-- Card showing total registered users -->
+                <div class="stat-card blue">
+                    <div class="stat-number">{{ stats['total_users'] }}</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <!-- Card showing total products listed -->
+                <div class="stat-card green">
+                    <div class="stat-number">{{ stats['total_products'] }}</div>
+                    <div class="stat-label">Total Products</div>
+                </div>
+                <!-- Card showing completed orders -->
+                <div class="stat-card orange">
+                    <div class="stat-number">{{ stats['total_orders'] }}</div>
+                    <div class="stat-label">Total Orders</div>
+                </div>
+                <!-- Card for platform revenue (hardcoded 0 for now) -->
+                <div class="stat-card purple">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Platform Sales</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Section - shows what users have been doing -->
+        <div class="content-box">
+            <h2>🕒 Recent Activity </h2>
+            <!-- Only show table if there's activity data -->
+            {% if recent_activity|length > 0 %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Activity Type</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop through each activity type and show count -->
+                    {% for activity in recent_activity %}
+                    <tr>
+                        <!-- Format event_type: replace underscores and capitalize -->
+                        <td><strong>{{ activity['event_type'].replace('_', ' ').title() }}</strong></td>
+                        <td>{{ activity['count'] }} events</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <!-- Show this message when no activity exists -->
+            <p style="color: #666; text-align: center; padding: 20px;">No activity recorded in the last 7 days</p>
+            {% endif %}
+        </div>
+
+        <!-- Info box explaining what data we track and why -->
+        <div class="content-box" style="background: #e7f3ff; border: 2px solid #007bff;">
+            <h2>ℹ️ About Activity Tracking</h2>
+            <div style="color: #004085; line-height: 1.6;">
+                <!-- Explain what data we collect -->
+                <p><strong>What We Track:</strong> User logins and basic interactions to monitor platform usage and
+                    improve user experience.</p>
+                <!-- Explain who can see this data and why it's secure -->
+                <p><strong>Privacy:</strong> Only admins can view analytics. Data is stored securely and used only for
+                    platform improvement.</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

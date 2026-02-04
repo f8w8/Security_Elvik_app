@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Products - Elvik</title>
+    <style>
+        /* Basic page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation bar */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        /* Header content wrapper */
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Site logo */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Navigation links container */
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Individual navigation links */
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+
+        /* Darken links on hover */
+        .nav-links a:hover {
+            background: #555;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Page header section */
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Page heading */
+        .page-header h1 {
+            margin: 0;
+            color: #333;
+        }
+
+        /* Standard button styling */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* Blue primary button */
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        /* Green success button */
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Red danger button */
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        /* Gray secondary button */
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        /* Base alert styling */
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        /* Error message style */
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Success message style */
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Products grid layout */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Individual product card */
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Product title */
+        .product-card h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        /* Product image styling */
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        /* Placeholder for missing image */
+        .product-image-placeholder {
+            width: 100%;
+            height: 200px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* Product description text */
+        .product-description {
+            color: #666;
+            font-size: 14px;
+            margin: 10px 0;
+            max-height: 60px;
+            overflow: hidden;
+        }
+
+        /* Product information section */
+        .product-info {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+        }
+
+        /* Individual info item */
+        .product-info-item {
+            text-align: center;
+        }
+
+        /* Info label text */
+        .product-info-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Info value display */
+        .product-info-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Price styling */
+        .product-info-value.price {
+            color: #28a745;
+        }
+
+        /* Product action buttons container */
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        /* Action button styling */
+        .product-actions .btn {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            font-size: 13px;
+        }
+
+        /* Empty state container */
+        .empty-state {
+            background: white;
+            padding: 60px 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Empty state heading */
+        .empty-state h2 {
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top navigation bar -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">Elvik</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('add_product') }}">Add Product</a>
+                <a href="{{ url_for('products') }}">Browse Products</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content container -->
+    <div class="container">
+        <div class="page-header">
+            <h1>My Products</h1>
+            <a href="{{ url_for('add_product') }}" class="btn btn-success">+ Add New Product</a>
+        </div>
+
+        <!-- Display flash messages if any -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <!-- Loop through each message -->
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if products %}
+        <!-- Products grid -->
+        <div class="products-grid">
+            <!-- Loop through each product -->
+            {% for product in products %}
+            <div class="product-card">
+                {% if product.image_path %}
+                <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.title }}"
+                    class="product-image">
+                {% else %}
+                <div class="product-image-placeholder">No image</div>
+                {% endif %}
+                <h3>{{ product.title }}</h3>
+                <div class="product-description">{{ product.description }}</div>
+
+                <div class="product-info">
+                    <div class="product-info-item">
+                        <div class="product-info-label">Price</div>
+                        <div class="product-info-value price">${{ "%.2f"|format(product.price) }}</div>
+                    </div>
+                    <div class="product-info-item">
+                        <div class="product-info-label">Stock</div>
+                        <div class="product-info-value">{{ product.stock }}</div>
+                    </div>
+                </div>
+
+                <div class="product-actions">
+                    <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-secondary">View</a>
+                    <a href="{{ url_for('seller_edit_product', product_id=product.id) }}"
+                        class="btn btn-primary">Edit</a>
+                    <!-- Delete form with confirmation -->
+                    <form method="POST" action="{{ url_for('seller_delete_product', product_id=product.id) }}"
+                        style="flex: 1; margin: 0;" onsubmit="return confirm('Delete this product?');">
+                        <!-- CSRF token for security -->
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-danger" style="width: 100%;">Delete</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Empty state when no products -->
+        <div class="empty-state">
+            <h2>No products yet</h2>
+            <p>Start selling by adding your first product</p>
+            <a href="{{ url_for('add_product') }}" class="btn btn-success">+ Add Your First Product</a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>

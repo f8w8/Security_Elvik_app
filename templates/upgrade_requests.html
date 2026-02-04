@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Seller Upgrade Requests</title>
+    <style>
+        /* Basic page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation bar */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        /* Header content wrapper */
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Site logo */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Content box styling */
+        .content-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Page heading */
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        /* Table cells styling */
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Table header styling */
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        /* Highlight row on hover */
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* Standard button styling */
+        .btn {
+            padding: 8px 15px;
+            margin: 0 5px;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+            color: white;
+            font-size: 14px;
+        }
+
+        /* Green approve button */
+        .btn-approve {
+            background: #28a745;
+        }
+
+        /* Darker green on hover */
+        .btn-approve:hover {
+            background: #1e7e34;
+        }
+
+        /* Red reject button */
+        .btn-reject {
+            background: #dc3545;
+        }
+
+        /* Darker red on hover */
+        .btn-reject:hover {
+            background: #c82333;
+        }
+
+        /* Gray back button */
+        .btn-back {
+            background: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        /* Darker gray on hover */
+        .btn-back:hover {
+            background: #545b62;
+        }
+
+        /* No requests message */
+        .no-requests {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 18px;
+        }
+
+        /* Flash messages container */
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        /* Base alert styling */
+        .alert {
+            padding: 12px 20px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        /* Success message style */
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top navigation bar -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">Elvik - Admin Panel</div>
+        </div>
+    </div>
+
+    <!-- Main content container -->
+    <div class="container">
+        <!-- Display flash messages if any -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <div class="content-box">
+            <a href="/dashboard" class="btn btn-back">← Back to Dashboard</a>
+            <h1>Seller Upgrade Requests</h1>
+
+            {% if requests|length == 0 %}
+            <!-- Show message when no requests -->
+            <div class="no-requests">No pending requests</div>
+            {% else %}
+            <!-- Display pending upgrade requests -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Requested At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop through each request -->
+                    {% for req in requests %}
+                    <tr>
+                        <td>{{ req['name'] }}</td>
+                        <td>{{ req['email'] }}</td>
+                        <td>{{ req['requested_at'][:19] }}</td>
+                        <td>
+                            <!-- Approve upgrade form with CSRF protection -->
+                            <form method="POST" action="/admin/approve_upgrade/{{ req['id'] }}"
+                                style="display: inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-approve"
+                                    style="border: none; cursor: pointer;">Approve</button>
+                            </form>
+                            <!-- Reject upgrade form with CSRF protection -->
+                            <form method="POST" action="/admin/reject_upgrade/{{ req['id'] }}" style="display: inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-reject"
+                                    style="border: none; cursor: pointer;">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

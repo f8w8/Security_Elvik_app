@@ -1,0 +1,114 @@
+Test results:
+>> Issue: [B704:markupsafe_markup_xss] Potential XSS with ``markupsafe.Markup`` detected. Do not use ``Markup`` on untrusted data.
+   Severity: Medium   Confidence: High
+   CWE: CWE-79 (https://cwe.mitre.org/data/definitions/79.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b704_markupsafe_markup_xss.html
+   Location: .\myApp.py:156:13
+155	    # Mark the result as safe so Jinja does not escape it
+156	    result = Markup(html)
+157	    return result
+
+--------------------------------------------------
+
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_calls.html#b311-random
+   Location: .\myApp.py:329:41
+328	    # Generate a 6-digit verification code (e.g., 123456)
+329	    verification_code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
+330	
+
+--------------------------------------------------
+
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_calls.html#b311-random
+   Location: .\myApp.py:502:30
+501	    # Generate a 6-digit reset code
+502	    reset_code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
+503	
+
+--------------------------------------------------
+
+>> Issue: [B201:flask_debug_true] A Flask app appears to be run with debug=True, which exposes the Werkzeug debugger and allows the execution of arbitrary code.
+   Severity: High   Confidence: Medium
+   CWE: CWE-94 (https://cwe.mitre.org/data/definitions/94.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b201_flask_debug_true.html
+   Location: .\myApp.py:1978:4
+1977	if __name__ == '__main__':
+1978	    app.run(debug=True)
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 1450
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 2
+		Medium: 1
+		High: 1
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 1
+		High: 3
+Files skipped (0):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Run started:2025-11-22 17:52:31.412266
+
+Test results:
+>> Issue: [B704:markupsafe_markup_xss] Potential XSS with ``markupsafe.Markup`` detected. Do not use ``Markup`` on untrusted data.
+   Severity: Medium   Confidence: High
+   CWE: CWE-79 (https://cwe.mitre.org/data/definitions/79.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b704_markupsafe_markup_xss.html
+   Location: .\myApp.py:156:13
+155	    # Mark the result as safe so Jinja does not escape it
+156	    result = Markup(html)
+157	    return result
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 1450
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 0
+		Medium: 1
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 0
+		High: 1
+Files skipped (0):
+

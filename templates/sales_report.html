@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sales Report - Elvik</title>
+    <style>
+        /* Basic page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation bar */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        /* Header content wrapper */
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Site logo */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Navigation links container */
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Individual navigation links */
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+
+        /* Darken links on hover */
+        .nav-links a:hover {
+            background: #555;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Back to transactions link */
+        .back-link {
+            display: inline-block;
+            color: #007bff;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        /* Underline on hover */
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Page header section */
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Page heading */
+        .page-header h1 {
+            margin: 0;
+            color: #333;
+        }
+
+        /* Report table container */
+        .report-table {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        /* Report heading */
+        .report-table h2 {
+            margin: 0 0 20px 0;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        /* Table header cells */
+        th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        /* Table data cells */
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        /* Highlight row on hover */
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Product name styling */
+        .product-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Price display styling */
+        .price {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        /* Empty state container */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        /* Empty state icon */
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        /* Empty state heading */
+        .empty-state h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* Empty state description */
+        .empty-state p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Standard button styling */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        /* Green success button */
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Darker green on hover */
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+
+        /* Total row highlighting */
+        .total-row {
+            background: #e7f3ff;
+            font-weight: bold;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top navigation bar -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🛒 Elvik</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('my_products') }}">My Products</a>
+                <a href="{{ url_for('seller_transactions') }}">Transactions</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content container -->
+    <div class="container">
+        <a href="{{ url_for('seller_transactions') }}" class="back-link">← Back to Transactions</a>
+
+        <div class="page-header">
+            <h1>📈 Sales Report by Product</h1>
+        </div>
+
+        <!-- Sales report table -->
+        <div class="report-table">
+            {% if product_sales %}
+            <h2>Product Performance</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th>Current Price</th>
+                        <th>Stock</th>
+                        <th>Orders</th>
+                        <th>Units Sold</th>
+                        <th>Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop through each product -->
+                    {% for product in product_sales %}
+                    <tr>
+                        <td>#{{ product.id }}</td>
+                        <td class="product-name">{{ product.title }}</td>
+                        <td class="price">${{ "%.2f"|format(product.price) }}</td>
+                        <td>{{ product.stock }}</td>
+                        <td>{{ product.orders_count or 0 }}</td>
+                        <td>{{ product.units_sold or 0 }}</td>
+                        <td class="price">${{ "%.2f"|format(product.revenue or 0) }}</td>
+                    </tr>
+                    {% endfor %}
+
+                    <!-- Total sales summary row -->
+                    <tr class="total-row">
+                        <td colspan="4">TOTAL</td>
+                        <td>{{ product_sales|sum(attribute='orders_count') or 0 }}</td>
+                        <td>{{ product_sales|sum(attribute='units_sold') or 0 }}</td>
+                        <td class="price">${{ "%.2f"|format(product_sales|sum(attribute='revenue') or 0) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% else %}
+            <!-- Show empty state when no sales data -->
+            <div class="empty-state">
+                <div class="empty-state-icon">📈</div>
+                <h2>No sales data yet</h2>
+                <p>Start selling products to see your sales report</p>
+                <a href="{{ url_for('add_product') }}" class="btn btn-success">Add Product</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

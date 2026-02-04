@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ product.title }} - Elvik</title>
+    <style>
+        /* Basic page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation bar */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        /* Header content wrapper */
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Site logo */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Navigation container */
+        .nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        /* Navigation links */
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+
+        /* Darken links on hover */
+        .nav a:hover {
+            background: #555;
+        }
+
+        /* User info display */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* User role badge */
+        .user-info span {
+            background: #555;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Back to products link */
+        .back-link {
+            display: inline-block;
+            color: #007bff;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        /* Underline on hover */
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Main product display container */
+        .product-main {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        /* Product layout grid */
+        .product-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        /* Product image section */
+        .product-image-section {
+            position: relative;
+        }
+
+        /* Product image styling */
+        .product-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        /* Placeholder for missing image */
+        .product-image-placeholder {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 120px;
+        }
+
+        /* Product title */
+        .product-info h1 {
+            color: #333;
+            margin: 0 0 15px 0;
+            font-size: 32px;
+            line-height: 1.3;
+        }
+
+        /* Seller information */
+        .product-seller {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        /* Seller name highlight */
+        .product-seller strong {
+            color: #007bff;
+        }
+
+        /* Product price display */
+        .product-price {
+            font-size: 42px;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        /* Stock information section */
+        .product-stock {
+            margin-bottom: 25px;
+        }
+
+        /* Stock status badge */
+        .stock-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Available stock color */
+        .stock-available {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Low stock warning color */
+        .stock-low {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* Out of stock color */
+        .stock-out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Product description box */
+        .product-description {
+            color: #555;
+            line-height: 1.8;
+            font-size: 16px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+            white-space: pre-wrap;
+        }
+
+        /* Description heading */
+        .product-description h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        /* Product action buttons container */
+        .product-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        /* Standard button styling */
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        /* Blue primary button */
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        /* Darker blue on hover */
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        /* Green success button */
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Darker green on hover */
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+
+        /* Disabled button state */
+        .btn-disabled {
+            background: #6c757d;
+            color: white;
+            cursor: not-allowed;
+        }
+
+        /* Product metadata section */
+        .product-meta {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        /* Metadata heading */
+        .product-meta h2 {
+            color: #333;
+            margin: 0 0 20px 0;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        /* Metadata grid layout */
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        /* Individual meta item */
+        .meta-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        /* Meta label styling */
+        .meta-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        /* Meta value styling */
+        .meta-value {
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Reviews section container */
+        .reviews-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Reviews heading */
+        .reviews-section h2 {
+            color: #333;
+            margin: 0 0 20px 0;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        /* Rating summary box */
+        .rating-summary {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Average rating number */
+        .avg-rating {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ffc107;
+        }
+
+        /* Rating details text */
+        .rating-details {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        /* Star rating display */
+        .stars {
+            color: #ffc107;
+            font-size: 24px;
+        }
+
+        /* Review list container */
+        .review-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Individual review card */
+        .review-card {
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        /* Review header section */
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        /* Review author name */
+        .review-author {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Review star rating */
+        .review-rating {
+            color: #ffc107;
+            font-size: 18px;
+        }
+
+        /* Review date display */
+        .review-date {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Review text content */
+        .review-content {
+            color: #555;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        /* No reviews message */
+        .no-reviews {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        /* No reviews icon */
+        .no-reviews-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        /* Flash messages container */
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        /* Base alert styling */
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        /* Success message style */
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Error message style */
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Login notice box */
+        .login-notice {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+
+        /* Login notice text */
+        .login-notice p {
+            margin: 0;
+            color: #856404;
+        }
+
+        /* Responsive layout for mobile */
+        @media (max-width: 768px) {
+            .product-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top navigation bar -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🛒 Elvik</div>
+            <div class="nav">
+                <a href="{{ url_for('products') }}">Browse Products</a>
+                <!-- Show different links based on login status -->
+                {% if session.get('user_id') %}
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('register') }}">Register</a>
+                {% endif %}
+            </div>
+            <!-- Display user info if logged in -->
+            {% if session.get('user_id') %}
+            <div class="user-info">
+                <span>{{ session.get('user_role', '').title() }}</span>
+                <strong>{{ session.get('user_name', '') }}</strong>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Main content container -->
+    <div class="container">
+        <a href="{{ url_for('products') }}" class="back-link">← Back to All Products</a>
+
+        <!-- Display flash messages if any -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <!-- Main product display -->
+        <div class="product-main">
+            <div class="product-layout">
+                <div class="product-image-section">
+                    <!-- Display product image or placeholder -->
+                    {% if product.image_path %}
+                    <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.title }}"
+                        class="product-image">
+                    {% else %}
+                    <div class="product-image-placeholder">📦</div>
+                    {% endif %}
+                </div>
+
+                <div class="product-info">
+                    <h1>{{ product.title }}</h1>
+
+                    <div class="product-seller">
+                        👤 Sold by <strong>{{ product.seller_name }}</strong>
+                    </div>
+
+                    <div class="product-price">${{ "%.2f"|format(product.price) }}</div>
+
+                    <!-- Display stock status with appropriate styling -->
+                    <div class="product-stock">
+                        {% if product.stock > 50 %}
+                        <span class="stock-badge stock-available">✓ In Stock ({{ product.stock }} available)</span>
+                        {% elif product.stock > 0 %}
+                        <span class="stock-badge stock-low">⚠ Only {{ product.stock }} left in stock</span>
+                        {% else %}
+                        <span class="stock-badge stock-out">✗ Out of Stock</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Show product description if available -->
+                    {% if product.description %}
+                    <div class="product-description">
+                        <h3>Product Description</h3>
+                        <p>{{ product.description }}</p>
+                    </div>
+                    {% endif %}
+
+                    <!-- Product purchase actions based on user role -->
+                    <div class="product-actions">
+                        {% if session.get('user_id') %}
+                        
+                        <!-- Only customers can purchase products -->
+                        {% if session.get('user_role') == 'customer' %}
+                        {% if product.stock > 0 %}
+                        <!-- Add to cart form with CSRF protection -->
+                        <form method="POST" action="{{ url_for('add_to_cart', product_id=product.id) }}"
+                            style="display: inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-success">🛒 Add to Cart</button>
+                        </form>
+                        <a href="{{ url_for('view_cart') }}" class="btn btn-primary">View Cart</a>
+                        {% else %}
+                        <button class="btn btn-disabled" disabled>Out of Stock</button>
+                        {% endif %}
+                        {% else %}
+                        <!-- Sellers cannot purchase - show notice -->
+                        <div
+                            style="padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px; color: #856404;">
+                            <strong>Note:</strong> Sellers cannot purchase products. Please create a customer account to
+                            buy items.
+                        </div>
+                        {% endif %}
+                        {% else %}
+                        <!-- Prompt guest users to login -->
+                        <a href="{{ url_for('login') }}" class="btn btn-primary">Login to Purchase</a>
+                        {% endif %}
+                    </div>
+
+                    <!-- Show login notice to guest users -->
+                    {% if not session.get('user_id') %}
+                    <div class="login-notice">
+                        <p><strong>Note:</strong> You must <a href="{{ url_for('login') }}">create an account and log
+                                in</a> before you can make purchases or leave product reviews.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Product information section -->
+        <div class="product-meta">
+            <h2>📋 Product Information</h2>
+            <div class="meta-grid">
+                <div class="meta-item">
+                    <div class="meta-label">Product ID</div>
+                    <div class="meta-value">#{{ product.id }}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Listed Date</div>
+                    <div class="meta-value">{{ product.created_at[:10] }}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Seller</div>
+                    <div class="meta-value">{{ product.seller_name }}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Stock Status</div>
+                    <div class="meta-value">
+                        {% if product.stock > 0 %}
+                        {{ product.stock }} units
+                        {% else %}
+                        Out of Stock
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer reviews section -->
+        <div class="reviews-section">
+            <h2>⭐ Customer Reviews</h2>
+
+            {% if avg_rating and avg_rating['review_count'] > 0 %}
+            <!-- Display average rating summary -->
+            <div class="rating-summary">
+                <div class="avg-rating">{{ "%.1f"|format(avg_rating['avg_rating']) }}</div>
+                <div class="stars">
+                    <!-- Calculate and display star rating -->
+                    {% set rating = avg_rating['avg_rating']|round|int %}
+                    {% for i in range(rating) %}★{% endfor %}
+                    {% for i in range(5 - rating) %}☆{% endfor %}
+                </div>
+                <div class="rating-details">
+                    Based on {{ avg_rating['review_count'] }} review(s)
+                </div>
+            </div>
+
+            <!-- Display all customer reviews -->
+            <div class="review-list">
+                {% for review in reviews %}
+                <div class="review-card">
+                    <div class="review-header">
+                        <div>
+                            <div class="review-author">{{ review.user_name }}</div>
+                            <div class="review-date">{{ review.created_at[:10] }}</div>
+                        </div>
+                        <div class="review-rating">
+                            {% for i in range(review.rating) %}★{% endfor %}
+                            {% for i in range(5 - review.rating) %}☆{% endfor %}
+                        </div>
+                    </div>
+                    <!-- Render review content with markdown support -->
+                    {% if review.content %}
+                    <div class="review-content">{{ review.content | markdown | safe }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <!-- Show message when no reviews exist -->
+            <div class="no-reviews">
+                <div class="no-reviews-icon">💬</div>
+                <p>No reviews yet. Be the first to review this product!</p>
+                {% if session.get('user_id') %}
+                <p style="margin-top: 15px;"><em>Purchase this product to leave a review</em></p>
+                {% else %}
+                <p style="margin-top: 15px;"><em><a href="{{ url_for('login') }}">Login</a> to leave a review after
+                        purchase</em></p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

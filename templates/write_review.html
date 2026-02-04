@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Write Review - Elvik</title>
+    <style>
+        /* Basic page setup */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation bar */
+        .header {
+            background: #1e5a99;
+            color: white;
+            padding: 15px 0;
+        }
+
+        /* Header content wrapper */
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Site logo */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Navigation links */
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Link styling */
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+
+        /* Darken links on hover */
+        .nav-links a:hover {
+            background: #555;
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Back navigation link */
+        .back-link {
+            display: inline-block;
+            color: #007bff;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        /* Underline on hover */
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Page heading */
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* Subtitle text */
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* Grid layout for products */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Individual product card */
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        /* Lift card on hover */
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Product image */
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        /* Placeholder for missing image */
+        .product-image-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 64px;
+        }
+
+        /* Product details section */
+        .product-info {
+            padding: 20px;
+        }
+
+        /* Product name */
+        .product-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* Price display */
+        .product-price {
+            font-size: 20px;
+            color: #28a745;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Status badge */
+        .review-status {
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        /* Green status for reviewed */
+        .status-reviewed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Yellow status for pending */
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* Standard button styling */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        /* Blue primary button */
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        /* Darker blue on hover */
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        /* Green success button */
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Darker green on hover */
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+
+        /* Disabled state */
+        .btn-disabled {
+            background: #6c757d;
+            color: white;
+            cursor: not-allowed;
+        }
+
+        /* Empty state message */
+        .empty-state {
+            background: white;
+            border-radius: 8px;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Large icon */
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        /* Heading in empty state */
+        .empty-state h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* Text in empty state */
+        .empty-state p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* Alert messages */
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        /* Green success message */
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Red error message */
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header section -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🛒 Elvik</div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('products') }}">Browse Products</a>
+                <a href="{{ url_for('my_orders') }}">My Orders</a>
+                <a href="{{ url_for('my_reviews') }}">My Reviews</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main container -->
+    <div class="container">
+        <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}        <h1>Write a Review</h1>
+        <p class="subtitle">Select a product you have purchased to write a review</p>
+
+        {% if products %}
+        <!-- Products grid -->
+        <div class="products-grid">
+            {% for product in products %}
+            <div class="product-card">
+                {% if product.image_path %}
+                <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.title }}"
+                    class="product-image">
+                {% else %}
+                <div class="product-image-placeholder">📦</div>
+                {% endif %}
+
+                <div class="product-info">
+                    <div class="product-title">{{ product.title }}</div>
+                    <div class="product-price">${{ "%.2f"|format(product.price) }}</div>
+
+                    {% if product.has_reviewed > 0 %}
+                    <div class="review-status status-reviewed">
+                        ✓ Review Submitted
+                    </div>
+                    <a href="{{ url_for('my_reviews') }}" class="btn btn-disabled">Already Reviewed</a>
+                    {% else %}
+                    <div class="review-status status-pending">
+                        📝 Ready to Review
+                    </div>
+                    <a href="{{ url_for('add_review', product_id=product.id) }}" class="btn btn-success">Write
+                        Review</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Empty state -->
+        <div class="empty-state">
+            <div class="empty-state-icon">🛍️</div>
+            <h2>No Purchases Yet</h2>
+            <p>You haven't purchased any products yet. Buy products to leave reviews!</p>
+            <a href="{{ url_for('products') }}" class="btn btn-primary" style="max-width: 300px; margin: 0 auto;">Browse
+                Products</a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>
